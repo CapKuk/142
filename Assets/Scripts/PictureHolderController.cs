@@ -7,9 +7,6 @@ using UnityEngine.UI;
 public class PictureHolderController : MonoBehaviour
 {
     private static int id = 0;
-    private static readonly float height = 200;
-    private static readonly float spaser = 50;
-    private static readonly float screenWeight = 480;
 
     private RawImage rawImageL;
     private RawImage rawImageR;
@@ -24,15 +21,9 @@ public class PictureHolderController : MonoBehaviour
         rawImageL = this.transform.Find("RawImageLeft").GetComponent<RawImage>();
         rawImageR = this.transform.Find("RawImageRight").GetComponent<RawImage>();
 
-        transform.anchoredPosition = new Vector2(0, -1 * (height * 0.5f + id * height + id * spaser));
-        /*
-        100
-        100 + 200 + 50
-        100 + 2 * 200 + 2 * 50
-        100 + 3 * 200 + 3 * 50
-         */
+        //transform.anchoredPosition = new Vector2(0, -1 * (height * 0.5f + id * height + id * spaser));
 
-        transform.sizeDelta = new Vector2(screenWeight, height);
+        //transform.sizeDelta = new Vector2(screenWeight, height);
         picURL_L = Model.baseURL + (2 * id + 1).ToString() + Model.baseFormat;
         picURL_R = Model.baseURL + (2 * id + 2).ToString() + Model.baseFormat;
         rawImageL.color = new Color(0, 0, 0);
@@ -58,6 +49,6 @@ public class PictureHolderController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 }
