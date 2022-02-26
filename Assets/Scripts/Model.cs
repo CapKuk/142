@@ -11,7 +11,7 @@ public class Model : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 3; i++)
         {
             var imageItem = Instantiate(imageHolder);
             imageItem.transform.SetParent(transform.parent, false);

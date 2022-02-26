@@ -53,8 +53,8 @@
     <UnityVersion>2020.3.27f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\PictureHolderController.cs" />
     <Compile Include="Assets\Scripts\Model.cs" />
+    <Compile Include="Assets\Scripts\PictureHolderController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

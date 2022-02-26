@@ -9,41 +9,40 @@ public class PictureHolderController : MonoBehaviour
     private static int id = 0;
     private static readonly float height = 200;
     private static readonly float spaser = 50;
+    private static readonly float screenWeight = 480;
 
-    private RawImage rawImage;
+    private RawImage rawImageL;
+    private RawImage rawImageR;
 
-    private string picURL;
+    private string picURL_L;
+    private string picURL_R;
 
     // Start is called before the first frame update
     void Start()
     {
-        rawImage = GetComponent<RawImage>();
         var transform = GetComponent<RectTransform>();
+        rawImageL = this.transform.Find("RawImageLeft").GetComponent<RawImage>();
+        rawImageR = this.transform.Find("RawImageRight").GetComponent<RawImage>();
+
+        transform.anchoredPosition = new Vector2(0, -1 * (height * 0.5f + id * height + id * spaser));
+        /*
+        100
+        100 + 200 + 50
+        100 + 2 * 200 + 2 * 50
+        100 + 3 * 200 + 3 * 50
+         */
+
+        transform.sizeDelta = new Vector2(screenWeight, height);
+        picURL_L = Model.baseURL + (2 * id + 1).ToString() + Model.baseFormat;
+        picURL_R = Model.baseURL + (2 * id + 2).ToString() + Model.baseFormat;
+        rawImageL.color = new Color(0, 0, 0);
+        rawImageR.color = new Color(0, 0, 0);
+        StartCoroutine(DownloadImage(picURL_L, rawImageL));
+        StartCoroutine(DownloadImage(picURL_R, rawImageR));
         id++;
-        if (id % 2 == 1)
-        {
-            transform.anchorMin = new Vector2(0, 1);
-            transform.anchorMax = new Vector2(0, 1);
-            transform.pivot = new Vector2(0.5f, 0.5f);
-
-            transform.anchoredPosition = new Vector2(height * 0.5f, -(height * 0.5f + (id - 1) * 0.5f * (height + spaser)));
-        }
-        else
-        {
-            transform.anchorMin = new Vector2(1, 1);
-            transform.anchorMax = new Vector2(1, 1);
-            transform.pivot = new Vector2(0.5f, 0.5f);
-
-            transform.anchoredPosition = new Vector2(-height * 0.5f, -(height * 0.5f + (id - 2) * 0.5f * (height + spaser)));
-        }
-
-        transform.sizeDelta = new Vector2(200, 200);
-        picURL = Model.baseURL + id + Model.baseFormat;
-        rawImage.color = new Color(0, 0, 0);
-        StartCoroutine(DownloadImage(picURL));
     }
 
-    IEnumerator DownloadImage(string MediaUrl)
+    IEnumerator DownloadImage(string MediaUrl, RawImage imgHolder)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
         yield return request.SendWebRequest();
@@ -51,14 +50,14 @@ public class PictureHolderController : MonoBehaviour
             Debug.Log(request.error);
         else
         {
-            rawImage.color = new Color(255, 255, 255);
-            rawImage.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            imgHolder.color = new Color(255, 255, 255);
+            imgHolder.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
