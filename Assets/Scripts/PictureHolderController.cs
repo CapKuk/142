@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PictureHolderController : MonoBehaviour
 {
     private static int id = 0;
+    private int myId;
 
     private RawImage rawImageL;
     private RawImage rawImageR;
@@ -18,12 +19,14 @@ public class PictureHolderController : MonoBehaviour
     void Start()
     {
         var transform = GetComponent<RectTransform>();
-        rawImageL = this.transform.Find("RawImageLeft").GetComponent<RawImage>();
-        rawImageR = this.transform.Find("RawImageRight").GetComponent<RawImage>();
+        rawImageL = this.transform.Find("ButtonLeft").Find("RawImageLeft").GetComponent<RawImage>();
+        rawImageR = this.transform.Find("ButtonRight").Find("RawImageRight").GetComponent<RawImage>();
 
-        //transform.anchoredPosition = new Vector2(0, -1 * (height * 0.5f + id * height + id * spaser));
+        myId = id;
 
-        //transform.sizeDelta = new Vector2(screenWeight, height);
+        this.transform.Find("ButtonLeft").GetComponent<Button>().onClick.AddListener(LeftButtonPressed);
+        this.transform.Find("ButtonRight").GetComponent<Button>().onClick.AddListener(RightButtonPressed);
+
         picURL_L = Model.baseURL + (2 * id + 1).ToString() + Model.baseFormat;
         picURL_R = Model.baseURL + (2 * id + 2).ToString() + Model.baseFormat;
         rawImageL.color = new Color(0, 0, 0);
@@ -44,6 +47,19 @@ public class PictureHolderController : MonoBehaviour
             imgHolder.color = new Color(255, 255, 255);
             imgHolder.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
+    }
+    private void LeftButtonPressed()
+    {
+        Debug.Log("LeftButton" + (2 * myId + 1));
+        Model.NewScene(2 * myId + 1);
+        id = 0;
+    }
+
+    private void RightButtonPressed()
+    {
+        Debug.Log("RightButton" + (2 * myId + 2));
+        Model.NewScene(2 * myId + 2);
+        id = 0;
     }
 
     // Update is called once per frame

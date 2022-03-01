@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Model : MonoBehaviour
@@ -6,25 +7,31 @@ public class Model : MonoBehaviour
     [SerializeField] private GameObject imageHolder;
     [SerializeField] private ScrollRect galery;
 
-    internal static readonly string baseURL = "http://data.ikppbb.com/test-task-unity-data/pics/";
-    internal static readonly string baseFormat = ".jpg";
+    internal const string baseURL = "http://data.ikppbb.com/test-task-unity-data/pics/";
+    internal const string baseFormat = ".jpg";
+    internal static int pictureId;
 
     private float sumHeight = 0f;
+    private int currentId = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         galery.verticalNormalizedPosition = 1;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 4; i++)
         {
-            var imageItem = Instantiate(imageHolder);
-            imageItem.transform.SetParent(transform.parent, false);
-            imageItem.transform.SetParent(galery.content);
-            sumHeight += imageHolder.GetComponent<RectTransform>().sizeDelta.y + galery.content.GetComponent<VerticalLayoutGroup>().spacing;
+            AddItem();
         }
         sumHeight -= galery.GetComponent<RectTransform>().sizeDelta.y;
-        Debug.Log(sumHeight);
-        Debug.Log(imageHolder.GetComponent<RectTransform>().sizeDelta.y + galery.content.GetComponent<VerticalLayoutGroup>().spacing);
+    }
+
+    private void AddItem()
+    {
+        var imageItem = Instantiate(imageHolder);
+        imageItem.transform.SetParent(transform.parent, false);
+        imageItem.transform.SetParent(galery.content);
+        sumHeight += imageHolder.GetComponent<RectTransform>().sizeDelta.y + galery.content.GetComponent<VerticalLayoutGroup>().spacing;
+        currentId++;
     }
 
     public void ValueChandged()
@@ -35,8 +42,21 @@ public class Model : MonoBehaviour
         }
         if(galery.content.transform.localPosition.y > sumHeight)
         {
-            galery.content.transform.localPosition = new Vector2(0, sumHeight);
+            if(currentId < 33)
+            {
+                AddItem();
+            }
+            else
+            {
+                galery.content.transform.localPosition = new Vector2(0, sumHeight);
+            }
         }
+    }
+
+    internal static void NewScene(int id)
+    {
+        SceneManager.LoadScene("ShowPictureScene");
+        pictureId = id;
     }
 
     // Update is called once per frame
